@@ -1,21 +1,30 @@
-var AWS = require('aws-sdk'); 
-var jsSHA = require("jssha");
-
 /**
+ * CLI utility to create user credentials for imapper-auth-s3
+ * 
+ * General usage:
+ * 		node setuserpwd --user <user> --password <password> [--bucket <S3Bucket>] [--keysuffix <suffix>]
  *
- * This file assumes it's being called using the syntax
+ * where user is a standard email address, password
+ * is a string with no spaces, optional S3Bucket is the 
+ * S3 bucket to write to, and optional suffix is the 
+ * suffix added to the key.
  *
- * 		node setuserpwd user password
- *
- * where user is a standard email address and password
- * is a string with no spaces
+ * If --bucket and/or --keysuffix are omitted, the default 
+ * values defined below will be used.
  *
  * Creates a JSON object with two properties, S1 and S2.
  * S1 is the security salt that is generated at runtime
  * S2 is the salted password hash
  *
  * This is then stored in the appropriate S3 bucket
+ *
+ * NOTE: Make sure the shell account you are using has the 
+ * proper credentials to access the AWS account. See the
+ * Amazon SDK documentation for details.
  */
+
+var AWS = require('aws-sdk'); 
+var jsSHA = require("jssha");
 
 
 /**
@@ -25,24 +34,48 @@ var jsSHA = require("jssha");
  * 
  * user + suffix
  */
-var S3BucketSuffix = '.ses.inbound';
+var S3BucketName = 'yourBucketName';
 
 /**
  * Name of the object (file) the data is stored in on S3
  */
-var S3KeyName = 'auth.json';
+var S3KeySuffix = '.auth.json';
 
 /*****   *****/
 var s3 = new AWS.S3(); 
 
+/** 
+ * Extract command-line arguments
+ * Works whether using 'node setuserpwd' or 'setuserpwd'
+ */
+
 // extract command line argument list
 var params = process.argv;
 
-// remove first two params and store the next two
-params.shift();
-params.shift();
-var user = params.shift();
-var password = params.shift();
+// if the first arg is node then remove the second arg which is the filename
+if (params.shift().toLowerCase() == 'node') params.shift();
+
+var arg, 
+		user,
+		password;
+
+while (arg = params.shift()) {
+	switch(arg.toLowerCase()) {
+		case '--bucket': 
+			S3BucketName = params.shift();
+		break;
+		case '--keysuffix': 
+			S3KeySuffix = params.shift();
+		break;
+		case '--user': 
+			user = params.shift();
+		break;
+		case '--password': 
+			password = params.shift();
+		break;
+	} // switch
+} // while arg
+
 
 var data = {};
 

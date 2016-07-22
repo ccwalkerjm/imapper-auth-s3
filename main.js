@@ -14,22 +14,22 @@ var s3 = new AWS.S3();
 
 var exports = module.exports = {};
 
-exports.options = {
+s3Options = {
 	S3BucketName: '',
 	S3KeySuffix: '.auth.json'
 };
 
 exports.authenticate = function(options,callback) {
 	// bail if no bucket name set
-	if (this.options.S3BucketName == '') {
+	if (s3Options.S3BucketName == '') {
     	var err = {message: 'Authentication failed.'};
 			callback(err,null);
 			return;
 	}
 
-	var key = options.username.replace('@','--') + this.options.S3KeySuffix;
+	var key = options.username.replace('@','--') + s3Options.S3KeySuffix;
 	
-	s3.getObject({Bucket: this.options.S3BucketName, Key: key}, function(error, data) {
+	s3.getObject({Bucket: s3Options.S3BucketName, Key: key}, function(error, data) {
 	  if (error) {
 	    if (error.code == 'NoSuchKey') {
 	    	//console.log('The requested object does not exist.');
@@ -66,5 +66,8 @@ exports.authenticate = function(options,callback) {
 
 }; // authenticate
 
+module.exports.setS3Options = function(key, value) {
+  s3Options[key] = value;
+}; // setS3Options
 
 
