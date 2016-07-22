@@ -6,8 +6,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Chris Langtiw",
+  "author": "Chris Langtiw https://github.com/seelang2",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seelang2/imapper-auth-s3.git"
+  },
+  "keywords": [
+    "imapper",
+    "AWS",
+    "s3"
+  ],
   "dependencies": {
     "aws": "0.0.3-2",
     "aws-sdk": "^2.4.2",
