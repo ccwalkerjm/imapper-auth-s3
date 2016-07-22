@@ -13,8 +13,8 @@ npm install imapper-auth-s3 --save
 Import the auth module and configure the S3 options: 
 ```javascript
 var userAuth = require("imapper-auth-s3");
-userAuth.options.setS3Options('S3BucketName', 'YourS3Bucket');
-userAuth.options.setS3Options('S3KeySuffix', '.suffix'); // key suffix. Default is '.auth.json'
+userAuth.setS3Options('S3BucketName', 'YourS3Bucket');
+userAuth.setS3Options('S3KeySuffix', '.suffix'); // key suffix. Default is '.auth.json'
 ```
 Then add the auth module to the imapper configuration options:
 ```javascript
