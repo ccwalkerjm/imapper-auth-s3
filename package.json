@@ -1,0 +1,16 @@
+{
+  "name": "imapper-auth-s3",
+  "version": "0.2.0",
+  "description": "AWS S3 File-based user authentication",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chris Langtiw",
+  "license": "ISC",
+  "dependencies": {
+    "aws": "0.0.3-2",
+    "aws-sdk": "^2.4.2",
+    "jssha": "^2.1.0"
+  }
+}
